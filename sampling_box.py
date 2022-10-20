@@ -39,14 +39,15 @@ def check_coordinates(coordinates, data):
 
 
 def create_sub_array(volume_image, coordinates, box):
-    sample_box = volume_image[coordinates[0]-box:coordinates[0]+box, coordinates[1]-box:coordinates[1]+box, coordinates[2]-box:coordinates[2]+box]
+    sample_box = volume_image[coordinates[0]-box/2:coordinates[0]+box/2, coordinates[1]-box/2:coordinates[1]+box/2,
+                 coordinates[2]-box/2:coordinates[2]+box/2]
 
     return sample_box
 
 
 def check_box(coordinates, box, data):
     for i in range(3):
-        if coordinates[i]-box < 0 or coordinates[i]+box > data.shape[i]:
+        if coordinates[i]-box/2 < 0 or coordinates[i]+box/2 > data.shape[i]:
             sys.exit('ERROR! The supplied box edge length ' + str(box) +
                      ' leads to sample box outside the sample area with dimensions '
                      + str(data.shape) + '. Choose smaller box edge length or different coordinates. '
@@ -65,7 +66,7 @@ def analyze_volume(sample_box):
                     vessel += 1
                 else:
                     background += 1
-    # Todo: calculate volume fraction and write results to file
+
     print('In the sample there are ' + str(vessel) + ' voxels of vessels and ' + str(background) + ' voxels of background.')
 
     fraction = round((vessel / (vessel + background)) * 100, 2)
